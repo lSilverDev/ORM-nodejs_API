@@ -25,6 +25,17 @@ class PeopleController{
             return response.status(500).json(err.message);
         }
     }
+
+    static async createPeople(request, response){
+        const newPerson = request.body;
+
+        try{
+            const person = await db.people.create(newPerson);
+            return response.status(200).json(person);
+        } catch (err){
+            return response.status(500).json(err.message);
+        }
+    }
 }
 
 module.exports = PeopleController;
