@@ -13,8 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       classes.hasMany(models.enrollments, {
         foreignKey: 'class_id'
       });
-      classes.belongsTo(models.people);
-      classes.belongsTo(models.levels);
+
+      classes.belongsTo(models.people, {
+        foreignKey: 'teacher_id'
+      });
+      classes.belongsTo(models.levels, {
+        foreignKey: 'level_id'
+      });
     }
   }
   classes.init({
