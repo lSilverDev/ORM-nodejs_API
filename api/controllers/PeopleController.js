@@ -75,6 +75,76 @@ class PeopleController{
             return response.status(500).json(err.message);
         }
     }
+
+    static async getEnrollmentsById(request, response){
+        const { studentId, enrollmentId } = request.params;
+
+        try{
+            const enrollment = await db.enrollments.findOne({
+                where: {
+                    id: Number(enrollmentId),
+                    student_id: Number(studentId)
+                }
+            });
+            return response.status(200).json(enrollment);
+        } catch (err){
+            return response.status(500).json(err.message);
+        }
+    }
+
+    static async createEnrollment(request, response){
+        const { student_id } = request.params;
+        const newEnrollment = { ...request.body, student_id: Number(student_id) };
+
+        try{
+            const newEnrollment = await db.enrollments.create(newEnrollment);
+            return response.status(200).json(newEnrollment);
+        } catch (err){
+            return response.status(500).json(err.message);
+        }
+    }
+
+    static async updateEnrollment(request, response){
+        const { studentId, enrollmentId } = request.params;
+        const updateEnrollment = request.body;
+
+        try{
+            await db.enrollments.update(updateEnrollment, {
+                where: {
+                    id: Number(enrollmentId),
+                    student_id: Number(studentId)
+                }
+            });
+
+            const enrollment = await db.enrollments.findOne({
+                where: {
+                    id: Number(enrollmentId),
+                    student_id: Number(studentId)
+                }
+            });
+
+            return response.status(200).json(enrollment);
+        } catch (err){
+            return response.status(500).json(err.message);
+        }
+    }
+
+    static async deleteEnrollment(request, response){
+        const { studentId, enrollmentId } = request.params;
+
+        try{
+            await db.enrollments.destroy({
+                where: {
+                    id: Number(enrollmentId),
+                    student_id: Number(studentId)
+                }
+            });
+
+            return response.status(200).json("Enrollment deleted!");
+        } catch (err){
+            return response.status(500).json(err.message);
+        }
+    }
 }
 
 module.exports = PeopleController;
